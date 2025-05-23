@@ -56,6 +56,10 @@
             z-index: 40;
             display: none;
         }
+        .dropdown-menu.left {
+            right: auto;
+            left: 0.5rem;
+        }
         .dropdown-menu a {
             display: block;
             padding: 0.75rem 1rem;
@@ -85,7 +89,7 @@
                 </button>
                 
                 <!-- Icons on the right -->
-                <div class="flex items-center">
+                <div class="flex items-center space-x-2">
                     <!-- Layers Icon -->
                     <button class="p-1 rounded-full hover:bg-secondary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -95,16 +99,26 @@
                         </svg>
                     </button>
                     
-                    <!-- Line Plotting Icon -->
-                    <button class="p-1 rounded-full hover:bg-secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="32" viewBox="0 0 64 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="8" cy="16" r="2" fill="#007BFF"/>
-                            <circle cx="20" cy="8" r="2" fill="#007BFF"/>
-                            <circle cx="36" cy="12" r="2" fill="#007BFF"/>
-                            <circle cx="48" cy="4" r="2" fill="#007BFF"/>
-                            <path d="M8 16 L20 8 L36 12 L48 4" />
-                        </svg>
-                    </button>
+                    <!-- Line Plotting Icon with Dropdown -->
+                    <div class="relative" >
+                        <button id="linePlottingMenu" class="p-1 rounded-full hover:bg-secondary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="32" viewBox="0 0 64 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="8" cy="16" r="2" fill="#007BFF"/>
+                                <circle cx="20" cy="8" r="2" fill="#007BFF"/>
+                                <circle cx="36" cy="12" r="2" fill="#007BFF"/>
+                                <circle cx="48" cy="4" r="2" fill="#007BFF"/>
+                                <path d="M8 16 L20 8 L36 12 L48 4" />
+                            </svg>
+                        </button>
+                        
+                        <!-- Line Plotting Dropdown Menu -->
+                        <div id="linePlottingDropdown" class="dropdown-menu">
+                            <a href="#" onclick="recordFeature()">Record Feature</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" onclick="recordTrack()">Record Track</a>
+                          </div>
+                          
+                    </div>
                     
                     <!-- Hamburger Menu Icon with Dropdown -->
                     <div class="relative">
@@ -116,10 +130,10 @@
                             </svg>
                         </button>
                         
-                        <!-- Dropdown Menu -->
-                        <div id="dropdownMenu" class="dropdown-menu">
+                        <!-- Hamburger Dropdown Menu -->
+                        <div id="hamburgerDropdown" class="dropdown-menu">
                             <a href="#" onclick="showProjects()">Projects</a>
-                            <a href="#" onclick="takePhoto()">Take a Photo</a>
+                            <a href="#" onclick="takePhoto()">Take new Photo</a>
                             <div class="dropdown-divider"></div>
                             <a href="#" onclick="showPage('loginPage')">Logout</a>
                         </div>
@@ -128,80 +142,100 @@
             </div>
         </header>
 
-        <!-- Sidebar - Overlay version -->
-        <aside id="sidebar" class="sidebar-transition sidebar-hidden w-64 bg-black text-light fixed top-16 left-0 bottom-0 z-20 overflow-y-auto shadow-xl">
-            <div class="p-4">
-                <!-- Project Section -->
-                <div class="mb-6">
-                    <h2 class="text-lg font-semibold mb-2 text-white">Project</h2>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Project Attributes</a></li>
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Layers</a></li>
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Search</a></li>
-                    </ul>
-                </div>
+       <!-- Sidebar - Overlay version -->
+       <aside id="sidebar" class="sidebar-transition sidebar-hidden w-64 bg-black text-light fixed top-16 left-0 bottom-0 z-20 overflow-y-auto shadow-xl">
+        <div class="p-4">
+            <!-- Project Section -->
+            <div class="mb-6">
+                <div class="flex items-center mb-2 space-x-2">
+                    <img src="/img/projects.jpg" alt="projects" class="w-6 h-6">
+                    <h2 class="text-lg font-semibold text-white">Project</h2>
+                  </div>
+
+                  <div class="flex items-center mb-2 space-x-2">
+                    <img src="/img/projects.jpg" alt="projects" class="w-6 h-6">
+                    <h2 class="text-lg font-semibold  text-white">Project Attributes</h2>
+                  </div>
+
+                  <div class="flex items-center mb-2 space-x-2">
+                    <img src="/img/layers.jpg" alt="projects" class="w-6 h-6">
+                    <h2 class="text-lg font-semibold  text-white">Layers</h2>
+                  </div>
+
+                  <div class="flex items-center mb-2 space-x-2">
+                    <img src="/img/search.jpg" alt="projects" class="w-6 h-6">
+                    <h2 class="text-lg font-semibold  text-white">Search</h2>
+                  </div>
+
                 
-                <!-- GNSS Section -->
-                <div class="mb-6">
-                    <h2 class="text-lg font-semibold mb-2 text-white">GNSS</h2>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Bluetooth GNSS</a></li>
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">GNSS Status</a></li>
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Skyplot</a></li>
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">NTRIP Client</a></li>
-                    </ul>
-                </div>
-                
-                <!-- Record Section -->
-                <div class="mb-6">
-                    <h2 class="text-lg font-semibold mb-2 text-white">Record</h2>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Feature</a></li>
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Track</a></li>
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Photo</a></li>
-                    </ul>
-                </div>
-                
-                <!-- Import Section -->
-                <div class="mb-6">
-                    <h2 class="text-lg font-semibold mb-2 text-white">Import</h2>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Import Project</a></li>
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Import Template</a></li>
-                    </ul>
-                </div>
-
-                <!-- Share/Export Section -->
-                <div class="mb-6">
-                    <h2 class="text-lg font-semibold mb-2 text-white">Share / Export</h2>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Share</a></li>
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Export</a></li>
-                    </ul>
-                </div>
-
-                <!-- Templates Section -->
-                <div class="mb-6">
-                    <h2 class="text-lg font-semibold mb-2 text-white">Templates</h2>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Share Template</a></li>
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Export Template</a></li>
-                    </ul>
-                </div>
-
-                <!-- Other Section -->
-                <div class="mb-6">
-                    <h2 class="text-lg font-semibold mb-2 text-white">Other</h2>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Compass</a></li>
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Settings</a></li>
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">About</a></li>
-                    </ul>
-                </div>
-
-
+              <!--<ul class="space-y-2">
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Project Attributes</a></li>
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Layers</a></li>
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Search</a></li>
+                </ul>-->
             </div>
-        </aside>
+            
+            <!-- GNSS Section -->
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold mb-2 text-white">GNSS</h2>
+                <ul class="space-y-2">
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Bluetooth GNSS</a></li>
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">GNSS Status</a></li>
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Skyplot</a></li>
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">NTRIP Client</a></li>
+                </ul>
+            </div>
+            
+            <!-- Record Section -->
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold mb-2 text-white">Record</h2>
+                <ul class="space-y-2">
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Feature</a></li>
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Track</a></li>
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Photo</a></li>
+                </ul>
+            </div>
+            
+            <!-- Import Section -->
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold mb-2 text-white">Import</h2>
+                <ul class="space-y-2">
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Import Project</a></li>
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Import Template</a></li>
+                </ul>
+            </div>
+
+            <!-- Share/Export Section -->
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold mb-2 text-white">Share / Export</h2>
+                <ul class="space-y-2">
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Share</a></li>
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Export</a></li>
+                </ul>
+            </div>
+
+            <!-- Templates Section -->
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold mb-2 text-white">Templates</h2>
+                <ul class="space-y-2">
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Share Template</a></li>
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Export Template</a></li>
+                </ul>
+            </div>
+
+            <!-- Other Section -->
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold mb-2 text-white">Other</h2>
+                <ul class="space-y-2">
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Compass</a></li>
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Settings</a></li>
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">About</a></li>
+                </ul>
+            </div>
+
+
+        </div>
+    </aside>
 
         <!-- Overlay when sidebar is open -->
         <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-10 hidden"></div>
@@ -352,17 +386,33 @@
         
         // Hamburger menu dropdown functionality
         const hamburgerMenu = document.getElementById('hamburgerMenu');
-        const dropdownMenu = document.getElementById('dropdownMenu');
+        const hamburgerDropdown = document.getElementById('hamburgerDropdown');
         
         hamburgerMenu.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent the click from closing the dropdown immediately
-            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+            e.stopPropagation();
+            hamburgerDropdown.style.display = hamburgerDropdown.style.display === 'block' ? 'none' : 'block';
+            // Close the line plotting dropdown if open
+            linePlottingDropdown.style.display = 'none';
         });
         
-        // Close dropdown when clicking anywhere else
+        // Line plotting menu dropdown functionality
+        const linePlottingMenu = document.getElementById('linePlottingMenu');
+        const linePlottingDropdown = document.getElementById('linePlottingDropdown');
+        
+        linePlottingMenu.addEventListener('click', (e) => {
+            e.stopPropagation();
+            linePlottingDropdown.style.display = linePlottingDropdown.style.display === 'block' ? 'none' : 'block';
+            // Close the hamburger dropdown if open
+            hamburgerDropdown.style.display = 'none';
+        });
+        
+        // Close dropdowns when clicking anywhere else
         document.addEventListener('click', (e) => {
-            if (!dropdownMenu.contains(e.target) && e.target !== hamburgerMenu) {
-                dropdownMenu.style.display = 'none';
+            if (!hamburgerDropdown.contains(e.target) && e.target !== hamburgerMenu) {
+                hamburgerDropdown.style.display = 'none';
+            }
+            if (!linePlottingDropdown.contains(e.target) && e.target !== linePlottingMenu) {
+                linePlottingDropdown.style.display = 'none';
             }
         });
         
@@ -384,8 +434,9 @@
                 document.body.classList.remove('sidebar-open');
             }
             
-            // Close dropdown menu
-            dropdownMenu.style.display = 'none';
+            // Close dropdown menus
+            hamburgerDropdown.style.display = 'none';
+            linePlottingDropdown.style.display = 'none';
         }
         
         // Show projects page
@@ -398,6 +449,20 @@
             alert('Photo functionality would be implemented here');
             // In a real app, this would access the device camera
         }
+        
+        // Record feature function
+        function recordFeature() {
+            alert('Record Feature functionality would be implemented here');
+            // In a real app, this would start recording a feature
+        }
+        
+        // Record track function
+        function recordTrack() {
+            alert('Record Track functionality would be implemented here');
+            // In a real app, this would start recording a track
+        }
+        
+      
         
         // Show login page by default
         showPage('loginPage');
