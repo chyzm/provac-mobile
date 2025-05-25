@@ -280,8 +280,28 @@
 
                       <div class="flex items-center mb-2 space-x-2">
                         <img src="/img/photo.jpg" alt="projects" class="w-6 h-6">
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Photo</a></li>
+                        <li>
+                          <a href="#" class="block px-3 py-2 rounded hover:bg-gray-700" onclick="triggerCamera()">Photo</a>
+                        </li>
                       </div>
+                      
+                      <!-- Hidden file input -->
+                      <input type="file" accept="image/*" capture="environment" id="cameraInput" style="display:none" onchange="handlePhoto(this.files)">
+                      
+                      <script>
+                        function triggerCamera() {
+                          document.getElementById('cameraInput').click();
+                        }
+                      
+                        function handlePhoto(files) {
+                          if (files.length > 0) {
+                            const file = files[0];
+                            // Optional: preview, upload, or handle the photo
+                            console.log('Photo captured:', file);
+                          }
+                        }
+                      </script>
+                      
                 </ul>
             </div>
             
