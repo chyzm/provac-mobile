@@ -1,0 +1,146 @@
+       <!-- Sidebar - Overlay version -->
+       <aside id="sidebar" class="sidebar-transition sidebar-hidden w-64 bg-black text-light fixed top-16 left-0 bottom-0 z-20 overflow-y-auto shadow-xl">
+        <div class="p-4">
+            <!-- Project Section -->
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold mb-2 text-white">Project</h2>
+                <ul class="space-y-2">
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Project Attributes</a></li>
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Layers</a></li>
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Search</a></li>
+                </ul>
+            </div>
+            
+            <!-- GNSS Section -->
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold mb-2 text-white">GNSS</h2>
+                <ul class="space-y-2">
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Bluetooth GNSS</a></li>
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">GNSS Status</a></li>
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Skyplot</a></li>
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">NTRIP Client</a></li>
+                </ul>
+            </div>
+            
+            <!-- Record Section -->
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold mb-2 text-white">Record</h2>
+                <ul class="space-y-2">
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Feature</a></li>
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Track</a></li>
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Photo</a></li>
+                </ul>
+            </div>
+            
+            <!-- Import Section -->
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold mb-2 text-white">Import</h2>
+                <ul class="space-y-2">
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Import Project</a></li>
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Import Template</a></li>
+                </ul>
+            </div>
+
+            <!-- Share/Export Section -->
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold mb-2 text-white">Share / Export</h2>
+                <ul class="space-y-2">
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Share</a></li>
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Export</a></li>
+                </ul>
+            </div>
+
+            <!-- Templates Section -->
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold mb-2 text-white">Templates</h2>
+                <ul class="space-y-2">
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Share Template</a></li>
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Export Template</a></li>
+                </ul>
+            </div>
+
+            <!-- Other Section -->
+            <div class="mb-6">
+                <h2 class="text-lg font-semibold mb-2 text-white">Other</h2>
+                <ul class="space-y-2">
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Compass</a></li>
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Settings</a></li>
+                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">About</a></li>
+                </ul>
+            </div>
+
+
+        </div>
+    </aside>
+
+
+
+    // Toggle sidebar visibility (overlay version)
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const filterInput = document.querySelector('input[name="filter"]'); // Add this line
+
+    sidebarToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sidebar.classList.toggle('sidebar-hidden');
+        sidebarOverlay.classList.toggle('hidden');
+        document.body.classList.toggle('sidebar-open');
+    });
+
+    // Close sidebar when clicking anywhere on the document
+    document.addEventListener('click', (e) => {
+        // Check if sidebar is currently visible
+        const isSidebarVisible = !sidebar.classList.contains('sidebar-hidden');
+        
+        // Check if click is outside the sidebar (and not on the toggle button or filter input)
+        const isClickOutside = !sidebar.contains(e.target) && 
+                              e.target !== sidebarToggle &&
+                              e.target !== filterInput;
+        
+        if (isSidebarVisible && isClickOutside) {
+            sidebar.classList.add('sidebar-hidden');
+            sidebarOverlay.classList.add('hidden');
+            document.body.classList.remove('sidebar-open');
+        }
+    });
+
+ 
+
+
+    <script>
+        // Toggle sidebar visibility (overlay version)
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+    
+        sidebarToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sidebar.classList.toggle('sidebar-hidden');
+            sidebarOverlay.classList.toggle('hidden');
+            document.body.classList.toggle('sidebar-open');
+        });
+    
+        // Close sidebar when clicking anywhere on the document
+        document.addEventListener('click', (e) => {
+            // Check if sidebar is currently visible
+            const isSidebarVisible = !sidebar.classList.contains('sidebar-hidden');
+            
+            // Check if click is outside the sidebar (and not on the toggle button)
+            const isClickOutside = !sidebar.contains(e.target) && e.target !== sidebarToggle;
+            
+            if (isSidebarVisible && isClickOutside) {
+                sidebar.classList.add('sidebar-hidden');
+                sidebarOverlay.classList.add('hidden');
+                document.body.classList.remove('sidebar-open');
+            }
+        });
+    
+        // Prevent clicks inside sidebar from closing it
+        sidebar.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+    
+        // Rest of your existing JavaScript code...
+        // (Keep all the other functions and event listeners the same)
+    </script>

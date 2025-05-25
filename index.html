@@ -6,6 +6,8 @@
     <title>Provac Maps</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
     <script>
         tailwind.config = {
             theme: {
@@ -35,6 +37,10 @@
         }
         /* Prevent scrolling when sidebar is open */
         body.sidebar-open {
+            overflow: hidden;
+        }
+
+        .modal-open {
             overflow: hidden;
         }
         /* Mobile-first container */
@@ -73,6 +79,60 @@
             border-top: 1px solid #e5e7eb;
             margin: 0.25rem 0;
         }
+        /* Projects panel transition */
+        .projects-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 80vh;
+            background: white;
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+            transform: translateY(100%);
+            transition: transform 0.3s ease-out;
+            z-index: 50;
+            overflow-y: auto;
+        }
+        .projects-panel-visible {
+            transform: translateY(0);
+        }
+        .projects-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 40;
+            display: none;
+        }
+
+        #sidebarOverlay {
+            position: fixed;
+            top: 4rem; /* Height of the header */
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 10;
+            display: none;
+        }
+
+        /* New project */
+     #createProjectModal {
+    transition: opacity 0.3s ease;
+}
+
+#createProjectAttributeModal{
+    transition: opacity 0.3s ease;
+}
+
+#createLayerModal{
+    transition: opacity 0.3s ease;
+}
+        
     </style>
 </head>
 <body class="font-sans bg-gray-100">
@@ -134,7 +194,7 @@
                         
                         <!-- Hamburger Dropdown Menu -->
                         <div id="hamburgerDropdown" class="dropdown-menu">
-                            <a href="#" onclick="showProjects()">Projects</a>
+                            <a href="#" onclick="showProjectsPanel()">Projects</a>
                             <a href="#" onclick="takePhoto()">Take new Photo</a>
                             <div class="dropdown-divider"></div>
                             <a href="#" onclick="showPage('loginPage')">Logout</a>
@@ -149,25 +209,26 @@
         <div class="p-4">
             <!-- Project Section -->
             <div class="mb-6">
-                <div class="flex items-center mb-2 space-x-2">
+                <div class="flex items-center mb-2 space-x-2 cursor-pointer" onclick="showProjectsPanel()">
                     <img src="/img/projects.jpg" alt="projects" class="w-6 h-6">
-                    <h2 class="text-lg font-semibold text-white">Project</h2>
+                    <h2 class="text-lg font-semibold text-white">Projects</h2>
                   </div>
 
-                  <div class="flex items-center mb-2 space-x-2">
+                  <div class="flex items-center mb-2 space-x-2 cursor-pointer" onclick="showprojectAttributesPanel()">
                     <img src="/img/projects.jpg" alt="projects" class="w-6 h-6">
-                    <h2 class="text-lg font-semibold  text-white">Project Attributes</h2>
+                    <h2 class="text-lg font-semibold text-white">Project Attributes</h2>
                   </div>
 
-                  <div class="flex items-center mb-2 space-x-2">
+                  <div class="flex items-center mb-2 space-x-2 cursor-pointer" onclick="showLayerPanel()">
                     <img src="/img/layers.jpg" alt="projects" class="w-6 h-6">
-                    <h2 class="text-lg font-semibold  text-white">Layers</h2>
+                    <h2 class="text-lg font-semibold text-white">Layers</h2>
                   </div>
 
-                  <div class="flex items-center mb-2 space-x-2">
+                  <div class="flex items-center mb-2 space-x-2 cursor-pointer" onclick="showSearchPanel()">
                     <img src="/img/search.jpg" alt="projects" class="w-6 h-6">
-                    <h2 class="text-lg font-semibold  text-white">Search</h2>
+                    <h2 class="text-lg font-semibold text-white">Search</h2>
                   </div>
+
 
                 
               <!--<ul class="space-y-2">
@@ -300,6 +361,200 @@
         <!-- Overlay when sidebar is open -->
         <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-10 hidden"></div>
 
+        <!-- Projects Panel (hidden by default) -->
+                <div id="projectsPanel" class="projects-panel">
+                    <div class="p-4">
+                    <!-- Header row with "new" and close -->
+                    <div class="flex justify-between items-center mb-4">
+                        <!-- New link with plus icon -->
+                        <a href="#" class="text-blue-600 font-semibold flex items-center space-x-1" onclick="showCreateProjectModal()">
+                            <span class="text-xl">+</span>
+                            <span>New</span>
+                        </a>
+
+                        <h2 class="text-xl font-semibold  text-center" style="margin-right:30px;">Projects</h2>
+
+                
+                        <!-- Close button -->
+                        <button onclick="hideProjectsPanel()" class="text-gray-600 text-xl font-bold">&times;</button>
+                    </div>
+                
+                    <!-- Panel drag handle -->
+                    <div class="flex justify-center mb-2">
+                        <div class="w-10 h-1 bg-gray-300 rounded-full"></div>
+                    </div>
+                
+                    
+                
+                    <!-- Filter section -->
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold mb-2">Filter</h3>
+                        <input class="w-full text-gray-700 bg-gray-100 p-3 rounded-lg" type="text" name="filter" placeholder="Filter projects">
+                    </div>
+                
+                
+                  
+                    </div>
+                </div>
+
+                <!-- Project Attributes Panel (hidden by default) -->
+                    <div id="projectAttributesPanel" class="projects-panel">
+                        <div class="p-4">
+                            <!-- Header row with title and buttons -->
+                            <div class="flex justify-between items-center mb-4">
+                                <!--  add buttons-->
+                                <a href="#" class="text-blue-600 font-semibold flex items-center space-x-1" onclick="showCreateProjectAttributeModal()">
+                                    <span class="text-xl">+</span>
+                                    
+                                </a>
+
+                                <h2 class="text-xl font-semibold text-center">Project Attributes</h2>
+
+                                <!-- Save and Close buttons -->
+                                <div class="flex items-center space-x-4">
+                                    <button onclick="saveProjectAttributes()" class="text-blue-600 hover:text-blue-800">
+                                        <i class="fas fa-download"></i>
+
+                                    </button>
+                                    <button onclick="hideProjectAttributesPanel()" class="text-gray-600 text-xl font-bold">&times;</button>
+                                </div>
+                            </div>
+
+                            <!-- Panel drag handle -->
+                            <div class="flex justify-center mb-2">
+                                <div class="w-10 h-1 bg-gray-300 rounded-full"></div>
+                            </div>
+
+                            <!-- Content area (add your project attributes form here) -->
+                            
+                        </div>
+                    </div>
+
+                    <!-- Layers panel (hidden by default) -->
+                    <div id="layerPanel" class="projects-panel">
+                        <div class="p-4">
+                            <!-- Header row with title and buttons -->
+                            <div class="flex justify-between items-center mb-4">
+                                <!--  add buttons-->
+                                <a href="#" class="text-blue-600 font-semibold flex items-center space-x-1" onclick="showCreateLayerModal()">
+                                    <span class="text-xl">+</span>
+                                    <span class="text-xl">Add</span>
+                                    
+                                </a>
+
+                                <h2 class="text-xl font-semibold text-center" style="margin-right: 30px;">Layers</h2>
+
+                                <!-- Save and Close buttons -->
+                                <div class="flex items-center space-x-4">
+                                    <button onclick="hideLayerPanel()" class="text-gray-600 text-xl font-bold">&times;</button>
+                                </div>
+                            </div>
+
+                       
+
+                            <!-- Panel drag handle -->
+                            <div class="flex justify-center mb-2">
+                                <div class="w-10 h-1 bg-gray-300 rounded-full"></div>
+                            </div>
+
+                            <!-- Content area (add your pLayer form here) -->
+
+                            <div class="mb-6">
+                                <label class="block text-gray-700 mb-2">Background Map</label>
+                                <div class="relative">
+                                    <select class="w-full px-3 py-2 bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-8">
+                                        <option >None</option>
+                                        <option selected>Apple Maps</option>
+                                        <option>Apple Satellite</option>
+                                        <option>Apple Hybrid</option>
+                                        <option>OpenStreetMap</option>
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 text-gray-500">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center space-x-4 mb-3">
+                                <label class="flex items-center space-x-1">
+                                  <input type="checkbox" class="form-checkbox">
+                                  <span>Track</span>
+                                </label>
+                                
+                                <label class="flex items-center space-x-1">
+                                  <input type="checkbox" class="form-checkbox">
+                                  <span>Photo</span>
+                                </label>
+                              </div>
+                              
+
+                            <div class="">
+                                <label class="block text-gray-700 mb-2">Filter</label>
+                                <div class="relative">
+                                    <select class="w-full px-3 py-2 bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-8">
+                                        <option  selected>[All Layers]</option>
+                                        <option>[Feature Layers]</option>
+                                        <option>[External Layers]</option>
+                                        
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 text-gray-500">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            
+                        </div>
+                    </div>
+
+                    <!--Search Panel-->
+
+                    <div id="searchPanel" class="projects-panel">
+                        <div class="p-4">
+                            <!-- Search bar with back button -->
+                            <div class="flex items-center mb-4 space-x-2">
+                                <!-- Back button to sidebar -->
+                                <div class="flex items-center space-x-4">
+                                    <button onclick="hideSearchPanel()" class="text-gray-600 hover:text-gray-800 transition-colors duration-200">
+                                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                                      </svg>
+                                    </button>
+                                  </div>
+                                  
+                                
+                            </div>
+                            <!-- Search bar -->
+                            <div class="flex-1 relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Search for items">
+                            </div>
+                    
+                            
+                    
+                           
+                    
+                            <!-- Projects list/content would go here -->
+                            <div class="projects-content">
+                                <!-- Your projects list content would be here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+  
+        
+        <!-- Overlay for projects panel -->
+        <div id="projectsOverlay" class="projects-overlay"></div>
+
         <!-- Main Content Area -->
         <main class="mt-16 flex-1 overflow-y-auto bg-white">
             <div class="container-mobile mx-auto">
@@ -425,17 +680,798 @@
         </main>
     </div>
 
-    <script>
-        // Toggle sidebar visibility (overlay version)
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebar = document.getElementById('sidebar');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
+    <!-- Create Project Modal -->
+<div id="createProjectModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+        <h3 class="text-xl font-semibold mb-4">Create Project</h3>
+        <p class="text-gray-600 mb-4">Create a project to save layers, points and photos.</p>
         
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('sidebar-hidden');
-            sidebarOverlay.classList.toggle('hidden');
-            document.body.classList.toggle('sidebar-open');
-        });
+        <div class="mb-4">
+            <label class="block text-gray-700 mb-2">Project Name</label>
+            <input type="text" id="projectName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        
+        <div class="mb-6">
+            <label class="block text-gray-700 mb-2">Import Layers</label>
+            <div class="relative">
+                <select class="w-full px-3 py-2 bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-8">
+                    <option selected>Do not import</option>
+                    <option>Project</option>
+                    <option>Template</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 text-gray-500">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex justify-end space-x-3">
+            <button onclick="hideCreateProjectModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100">Cancel</button>
+            <button onclick="createProject()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Create</button>
+        </div>
+    </div>
+</div>
+
+<!-- Create Project attribute Modal -->
+<div id="createProjectAttributeModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+        <h3 class="text-xl font-semibold mb-4">Add Project Attribute</h3>
+        
+        
+        <div class="mb-4">
+            <label class="block text-gray-700 mb-2">Attribute Name</label>
+            <input type="text" id="projectName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        
+        <div class="mb-6">
+            <label class="block text-gray-700 mb-2">Attribute Type</label>
+            <div class="relative">
+                <select class="w-full px-3 py-2 bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-8">
+                    <option>Options</option>
+                    <option>Numeric</option>
+                    <option selected>Text</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 text-gray-500">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex justify-end space-x-3">
+            <button onclick="hideCreateProjectAttributeModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100">Cancel</button>
+            <button onclick="createProjectAttribute()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Add</button>
+        </div>
+    </div>
+</div>
+
+
+  <!-- Main Button to Open Modal -->
+  <button onclick="openLayerType()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+    Add New Layer
+  </button>
+
+  <!-- Create Layer Modal - Main Selection -->
+  <div id="createLayerModal" class="fixed inset-0 z-50 hidden">
+    <!-- overlay -->
+    <div class="absolute inset-0 bg-black/60" onclick="closeAll()"></div>
+
+    <!-- content -->
+    <div id="layerTypeBox" class="relative mx-auto mt-24 w-64 bg-white p-6 rounded-lg shadow-lg" onclick="event.stopPropagation()">
+      <h3 class="text-lg font-bold mb-4">Select Layer Type</h3>
+      <ul class="space-y-3 select-none">
+        <li class="layer-item cursor-pointer hover:bg-blue-100 px-4 py-2 rounded" data-modal="mbtilesLayerModal">MBTiles</li>
+        <li class="layer-item cursor-pointer hover:bg-blue-100 px-4 py-2 rounded" data-modal="shapefileLayerModal">Shapefile</li>
+        <li class="layer-item cursor-pointer hover:bg-blue-100 px-4 py-2 rounded" data-modal="gpkgLayerModal">GeoPackage (GPKG)</li>
+        <li class="layer-item cursor-pointer hover:bg-blue-100 px-4 py-2 rounded" data-modal="geojsonLayerModal">GeoJSON</li>
+        <li class="layer-item cursor-pointer hover:bg-blue-100 px-4 py-2 rounded" data-modal="kmlLayerModal">KML</li>
+        <li class="layer-item cursor-pointer hover:bg-blue-100 px-4 py-2 rounded" data-modal="onlineTilesModal">Online Tiles (TMS/WMTS/XYZ)</li>
+        <li class="layer-item cursor-pointer hover:bg-blue-100 px-4 py-2 rounded" data-modal="wmsLayerModal">WMS</li>
+        <li class="layer-item cursor-pointer hover:bg-blue-100 px-4 py-2 rounded" data-modal="numericLayerModal">GNSS Recorded Feature</li>
+        <li class="layer-item cursor-pointer hover:bg-blue-100 px-4 py-2 rounded" data-modal="textLayerModal">Drawn Feature</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Individual Layer Type Modals -->
+  
+  <!-- MBTiles Modal -->
+  <div id="mbtilesLayerModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/60" onclick="closeAll()"></div>
+    <div class="relative mx-auto mt-24 w-96 bg-white p-6 rounded-lg shadow-lg" onclick="event.stopPropagation()">
+      <h3 class="text-lg font-bold mb-4">Add MbTiles Layer</h3>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Layer Name</label>
+          <input type="text" class="w-full px-3 py-2 border rounded">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Source</label>
+         <p>No files were found. Please copy the layers to Provac Maps folder in your device.</p>
+        </div>
+      </div>
+      <div class="flex justify-end space-x-2 mt-6">
+        <button onclick="closeAll()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</button>
+        <button onclick="saveLayer('mbtiles')" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shapefile Modal -->
+  <div id="shapefileLayerModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/60" onclick="closeAll()"></div>
+    <div class="relative mx-auto mt-24 w-96 bg-white p-6 rounded-lg shadow-lg" onclick="event.stopPropagation()">
+      <h3 class="text-lg font-bold mb-4">Add Shapefile Layer</h3>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Layer Name</label>
+          <input type="text" class="w-full px-3 py-2 border rounded">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Source</label>
+           <p>No files were found. Please copy the layers to Provac Maps folder in your device.</p>
+          </div>
+        
+      </div>
+      <div class="flex justify-end space-x-2 mt-6">
+        <button onclick="closeAll()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</button>
+        <button onclick="saveLayer('shapefile')" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GeoPackage Modal -->
+  <div id="gpkgLayerModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/60" onclick="closeAll()"></div>
+    <div class="relative mx-auto mt-24 w-96 bg-white p-6 rounded-lg shadow-lg" onclick="event.stopPropagation()">
+      <h3 class="text-lg font-bold mb-4">Add GeoPackage Layer</h3>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Layer Name</label>
+          <input type="text" class="w-full px-3 py-2 border rounded">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Source</label>
+           <p>No files were found. Please copy the layers to Provac Maps folder in your device.</p>
+          </div>
+      </div>
+      <div class="flex justify-end space-x-2 mt-6">
+        <button onclick="closeAll()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</button>
+        <button onclick="saveLayer('gpkg')" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GeoJSON Modal -->
+  <div id="geojsonLayerModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/60" onclick="closeAll()"></div>
+    <div class="relative mx-auto mt-24 w-96 bg-white p-6 rounded-lg shadow-lg" onclick="event.stopPropagation()">
+      <h3 class="text-lg font-bold mb-4">Add GeoJSON Layer</h3>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Layer Name</label>
+          <input type="text" class="w-full px-3 py-2 border rounded">
+        </div>
+        
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Source</label>
+           <p>No files were found. Please copy the layers to Provac Maps folder in your device.</p>
+          </div>
+      </div>
+      <div class="flex justify-end space-x-2 mt-6">
+        <button onclick="closeAll()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</button>
+        <button onclick="saveLayer('geojson')" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- KML Modal -->
+  <div id="kmlLayerModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/60" onclick="closeAll()"></div>
+    <div class="relative mx-auto mt-24 w-96 bg-white p-6 rounded-lg shadow-lg" onclick="event.stopPropagation()">
+      <h3 class="text-lg font-bold mb-4">Add KML Layer</h3>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Layer Name</label>
+          <input type="text" class="w-full px-3 py-2 border rounded">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Source</label>
+           <p>No files were found. Please copy the layers to Provac Maps folder in your device.</p>
+          </div>
+      </div>
+      <div class="flex justify-end space-x-2 mt-6">
+        <button onclick="closeAll()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</button>
+        <button onclick="saveLayer('kml')" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Add Layer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Online Tiles Modal -->
+  <div id="onlineTilesModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/60" onclick="closeAll()"></div>
+    <div class="relative mx-auto mt-24 w-96 bg-white p-6 rounded-lg shadow-lg" onclick="event.stopPropagation()">
+      <h3 class="text-lg font-bold mb-4">Add Online Tile Layer</h3>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Layer Name</label>
+          <input type="text" class="w-full px-3 py-2 border rounded">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Tile Source URL</label>
+          <input type="text" class="w-full px-3 py-2 border rounded">
+          <div class="text-[12px] inline-flex space-x-1">
+            <span class="text-gray-400">Example:</span>
+            <span class="text-blue-400">https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png</span>
+          </div>
+        </div>
+        <!--<div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Type</label>
+          <select class="w-full px-3 py-2 border rounded">
+            <option value="xyz">XYZ</option>
+            <option value="tms">TMS</option>
+            <option value="wmts">WMTS</option>
+          </select>
+        </div>-->
+        <div class="flex items-center">
+          <input type="checkbox" id="tileAuth" class="mr-2">
+          <label for="tileAuth" class="text-sm font-medium text-gray-700">Cache Tiles</label>
+        </div>
+      </div>
+      <div class="flex justify-end space-x-2 mt-6">
+        <button onclick="closeAll()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</button>
+        <button onclick="saveLayer('onlineTiles')" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WMS Modal -->
+  <div id="wmsLayerModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/60" onclick="closeAll()"></div>
+    <div class="relative mx-auto mt-24 w-96 bg-white p-6 rounded-lg shadow-lg" onclick="event.stopPropagation()">
+      <h3 class="text-lg font-bold mb-4">Add WMS Layer</h3>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Layer Name</label>
+          <input type="text" class="w-full px-3 py-2 border rounded">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">WMS URL</label>
+          <input type="text" placeholder="https://example.com/wms" class="w-full px-3 py-2 border rounded">
+        </div>
+        <div>
+            <label class="flex justify-between text-sm font-medium text-gray-700 mb-1">
+                <span>WMS Layer Name</span>
+                    <button class="text-blue-400 hover:underline focus:outline-none" onclick="selectWmsLayer()">
+                      Select Layer
+                    </button>
+                  </label>
+                  
+              </label>
+              
+          <input type="text" placeholder="layer1,layer2" class="w-full px-3 py-2 border rounded">
+        </div>
+        <div class="flex items-center">
+            <input type="checkbox" id="tileAuth" class="mr-2">
+            <label for="tileAuth" class="text-sm font-medium text-gray-700">Cache Tiles</label>
+          </div>
+      </div>
+      <div class="flex justify-end space-x-2 mt-6">
+        <button onclick="closeAll()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</button>
+        <button onclick="saveLayer('wms')" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GNSS Recorded Feature Modal -->
+  <div id="numericLayerModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/60" onclick="closeAll()"></div>
+    <div class="relative mx-auto mt-24 w-96 bg-white p-6 rounded-lg shadow-lg" onclick="event.stopPropagation()">
+      <h3 class="text-lg font-bold mb-4">Add GNSS Recorded Feature</h3>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Layer Name</label>
+          <input type="text" class="w-full px-3 py-2 border rounded">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Feature Type</label>
+          <select class="w-full px-3 py-2 border rounded">
+            <option value="point">Point</option>
+            <option value="line">Line</option>
+            <option value="polygon">Polygon</option>
+          </select>
+        </div>
+        <div class="relative w-full max-w-sm">
+            <!-- Label and Current Symbol -->
+            <label class="flex items-center justify-between text-sm font-medium text-gray-700 mb-1 select-none">
+              <span>Geometry Symbol</span>
+              <button id="currentSymbolBtn" class="w-6 h-6 text-blue-600" onclick="toggleSymbolMenu(event)">
+                <!-- Default: Circle Outline -->
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>
+              </button>
+            </label>
+          
+            <!-- Symbol Menu -->
+            <div id="symbolMenu"
+                 class="absolute right-0 mt-1 w-56 bg-white border rounded shadow-lg p-2 space-y-2 hidden z-50">
+          
+              <!-- 🔴 Color Picker -->
+              <div class="flex items-center justify-between px-2">
+                <span class="text-sm font-medium text-gray-600">Point Color</span>
+                <input type="color" id="symbolColorPicker" class="w-6 h-6 border rounded cursor-pointer" value="#2563eb" />
+              </div>
+              <hr class="my-1">
+          
+              <!-- Symbol Items -->
+              <div id="symbolList" class="space-y-2">
+                <P>Point Shape</P>
+                <!-- Buttons like below will be dynamically updated with selected color -->
+                <button class="symbol-btn flex items-center space-x-2 w-full text-gray-700 hover:text-blue-600"
+                        data-symbol="filled-triangle" title="Filled Triangle">
+                  <svg viewBox="0 0 24 24" fill="currentColor" class="symbol-icon w-4 h-4"><polygon points="12 4 20 20 4 20"/></svg>
+                  <span>Filled Triangle</span>
+                </button>
+          
+                <button class="symbol-btn flex items-center space-x-2 w-full text-gray-700 hover:text-blue-600"
+                        data-symbol="triangle" title="Triangle">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="symbol-icon w-4 h-4">
+                    <polygon points="12 4 20 20 4 20"/>
+                  </svg>
+                  <span>Triangle</span>
+                </button>
+          
+                <button class="symbol-btn flex items-center space-x-2 w-full text-gray-700 hover:text-blue-600"
+                data-symbol="filled-square" title="Filled Square">
+          <svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+            <rect x="4" y="4" width="16" height="16" rx="2"/>
+          </svg>
+          <span>Filled Square</span>
+        </button>
+    
+        <button class="symbol-btn flex items-center space-x-2 w-full text-gray-700 hover:text-blue-600"
+                data-symbol="square" title="Square">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
+            <rect x="4" y="4" width="16" height="16" rx="2"/>
+          </svg>
+          <span>Square</span>
+        </button>
+    
+        <button class="symbol-btn flex items-center space-x-2 w-full text-gray-700 hover:text-blue-600"
+                data-symbol="plus" title="Plus">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          <span>Plus</span>
+        </button>
+    
+        <button class="symbol-btn flex items-center space-x-2 w-full text-gray-700 hover:text-blue-600"
+                data-symbol="cross" title="Cross">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+          <span>Cross</span>
+        </button>
+    
+        <button class="symbol-btn flex items-center space-x-2 w-full text-gray-700 hover:text-blue-600"
+                data-symbol="filled-circle" title="Filled Circle">
+          <svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+            <circle cx="12" cy="12" r="9"/>
+          </svg>
+          <span>Filled Circle</span>
+        </button>
+    
+     
+          
+                <button class="symbol-btn flex items-center space-x-2 w-full text-gray-700 hover:text-blue-600"
+                        data-symbol="circle" title="Circle">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="symbol-icon w-4 h-4">
+                    <circle cx="12" cy="12" r="9"/>
+                  </svg>
+                  <span>Circle</span>
+                </button>
+              </div>
+          
+              <!-- OK / Cancel -->
+              <div class="flex justify-end space-x-4 pt-2 border-t mt-2 text-sm text-blue-600">
+                <button onclick="closeMenu()" class="hover:underline">Cancel</button>
+                <button onclick="closeMenu()" class="font-semibold hover:underline">OK</button>
+              </div>
+            </div>
+          </div>
+          
+          <script>
+          let selectedColor = "#2563eb"; // default blue
+          
+          function toggleSymbolMenu(e) {
+            e.stopPropagation();
+            document.getElementById('symbolMenu').classList.toggle('hidden');
+            document.addEventListener('click', outsideClose);
+            document.addEventListener('keydown', escClose);
+          }
+          
+          function closeMenu() {
+            document.getElementById('symbolMenu').classList.add('hidden');
+            document.removeEventListener('click', outsideClose);
+            document.removeEventListener('keydown', escClose);
+          }
+          
+          function outsideClose(e) {
+            if (!document.getElementById('symbolMenu').contains(e.target) &&
+                e.target.id !== 'currentSymbolBtn') closeMenu();
+          }
+          
+          function escClose(e) {
+            if (e.key === 'Escape') closeMenu();
+          }
+          
+          // Update color on input
+          document.getElementById('symbolColorPicker').addEventListener('input', function () {
+            selectedColor = this.value;
+            // Update all preview symbols
+            document.querySelectorAll('.symbol-btn svg').forEach(svg => {
+              if (svg.getAttribute('fill') !== "none") {
+                svg.setAttribute('fill', selectedColor);
+              }
+              if (svg.getAttribute('stroke') !== null) {
+                svg.setAttribute('stroke', selectedColor);
+              }
+            });
+          });
+          
+          // On symbol click
+          document.querySelectorAll('.symbol-btn').forEach(btn => {
+            btn.addEventListener('click', e => {
+              const svg = e.currentTarget.querySelector('svg').cloneNode(true);
+          
+              // Apply selected color
+              if (svg.getAttribute('fill') !== "none") {
+                svg.setAttribute('fill', selectedColor);
+              }
+              if (svg.getAttribute('stroke') !== null) {
+                svg.setAttribute('stroke', selectedColor);
+              }
+          
+              // Update main button
+              const preview = document.getElementById('currentSymbolBtn');
+              preview.innerHTML = '';
+              preview.appendChild(svg);
+          
+              closeMenu();
+            });
+          });
+          </script>
+          
+          
+      </div>
+      <div class="flex justify-end space-x-2 mt-6">
+        <button onclick="closeAll()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</button>
+        <button onclick="saveLayer('gnss')" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Drawn Feature Modal -->
+  <div id="textLayerModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/60" onclick="closeAll()"></div>
+    <div class="relative mx-auto mt-24 w-96 bg-white p-6 rounded-lg shadow-lg" onclick="event.stopPropagation()">
+      <h3 class="text-lg font-bold mb-4">New Drawn Feature Layer</h3>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Layer Name</label>
+          <input type="text" class="w-full px-3 py-2 border rounded">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Goemetry Type</label>
+          <select class="w-full px-3 py-2 border rounded">
+            <option value="point">Point</option>
+            <option value="line">Line</option>
+            <option value="polygon">Polygon</option>
+            <option value="text">Text Label</option>
+          </select>
+        </div>
+        <div class="relative w-full max-w-sm">
+            <!-- Label and Current Symbol -->
+            <label class="flex items-center justify-between text-sm font-medium text-gray-700 mb-1 select-none">
+                <span>Geometry Symbol</span>
+                <button id="geometrySymbolBtn" class="w-6 h-6 text-blue-600" onclick="toggleGeometrySymbolMenu(event)">
+                    <!-- Default: Circle Outline -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>
+                </button>
+            </label>
+          
+            <!-- Symbol Menu -->
+            <div id="geometrySymbolMenu"
+                 class="absolute right-0 mt-1 w-56 bg-white border rounded shadow-lg p-2 space-y-2 hidden z-50">
+          
+                <!-- Color Picker -->
+                <div class="flex items-center justify-between px-2">
+                    <span class="text-sm font-medium text-gray-600">Point Color</span>
+                    <input type="color" id="geometrySymbolColorPicker" class="w-6 h-6 border rounded cursor-pointer" value="#2563eb" />
+                </div>
+                <hr class="my-1">
+          
+                <!-- Symbol Items -->
+                <div id="geometrySymbolList" class="space-y-2">
+                    <p class="text-sm font-medium text-gray-600">Point Shape</p>
+                    
+                    <button class="geometry-symbol-btn flex items-center space-x-2 w-full text-gray-700 hover:text-blue-600"
+                            data-symbol="filled-triangle" title="Filled Triangle">
+                        <svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><polygon points="12 4 20 20 4 20"/></svg>
+                        <span>Filled Triangle</span>
+                    </button>
+          
+                    <button class="geometry-symbol-btn flex items-center space-x-2 w-full text-gray-700 hover:text-blue-600"
+                            data-symbol="triangle" title="Triangle">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
+                            <polygon points="12 4 20 20 4 20"/>
+                        </svg>
+                        <span>Triangle</span>
+                    </button>
+          
+                    <button class="geometry-symbol-btn flex items-center space-x-2 w-full text-gray-700 hover:text-blue-600"
+                            data-symbol="filled-square" title="Filled Square">
+                        <svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                            <rect x="4" y="4" width="16" height="16" rx="2"/>
+                        </svg>
+                        <span>Filled Square</span>
+                    </button>
+            
+                    <button class="geometry-symbol-btn flex items-center space-x-2 w-full text-gray-700 hover:text-blue-600"
+                            data-symbol="square" title="Square">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
+                            <rect x="4" y="4" width="16" height="16" rx="2"/>
+                        </svg>
+                        <span>Square</span>
+                    </button>
+            
+                    <button class="geometry-symbol-btn flex items-center space-x-2 w-full text-gray-700 hover:text-blue-600"
+                            data-symbol="plus" title="Plus">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
+                            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        <span>Plus</span>
+                    </button>
+            
+                    <button class="geometry-symbol-btn flex items-center space-x-2 w-full text-gray-700 hover:text-blue-600"
+                            data-symbol="cross" title="Cross">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
+                            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                        <span>Cross</span>
+                    </button>
+            
+                    <button class="geometry-symbol-btn flex items-center space-x-2 w-full text-gray-700 hover:text-blue-600"
+                            data-symbol="filled-circle" title="Filled Circle">
+                        <svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                            <circle cx="12" cy="12" r="9"/>
+                        </svg>
+                        <span>Filled Circle</span>
+                    </button>
+            
+                    <button class="geometry-symbol-btn flex items-center space-x-2 w-full text-gray-700 hover:text-blue-600"
+                            data-symbol="circle" title="Circle">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
+                            <circle cx="12" cy="12" r="9"/>
+                        </svg>
+                        <span>Circle</span>
+                    </button>
+                </div>
+          
+                <!-- OK / Cancel -->
+                <div class="flex justify-end space-x-4 pt-2 border-t mt-2 text-sm text-blue-600">
+                    <button onclick="closeGeometrySymbolMenu()" class="hover:underline">Cancel</button>
+                    <button onclick="closeGeometrySymbolMenu()" class="font-semibold hover:underline">OK</button>
+                </div>
+            </div>
+        </div>
+          
+        <script>
+        // Use a self-invoking function to avoid global scope pollution
+        (function() {
+            let geometrySymbolColor = "#2563eb"; // default blue
+        
+            function toggleGeometrySymbolMenu(e) {
+                e.stopPropagation();
+                const menu = document.getElementById('geometrySymbolMenu');
+                menu.classList.toggle('hidden');
+                
+                if (!menu.classList.contains('hidden')) {
+                    document.addEventListener('click', outsideGeometrySymbolClose);
+                    document.addEventListener('keydown', escGeometrySymbolClose);
+                } else {
+                    document.removeEventListener('click', outsideGeometrySymbolClose);
+                    document.removeEventListener('keydown', escGeometrySymbolClose);
+                }
+            }
+        
+            function closeGeometrySymbolMenu() {
+                document.getElementById('geometrySymbolMenu').classList.add('hidden');
+                document.removeEventListener('click', outsideGeometrySymbolClose);
+                document.removeEventListener('keydown', escGeometrySymbolClose);
+            }
+        
+            function outsideGeometrySymbolClose(e) {
+                if (!document.getElementById('geometrySymbolMenu').contains(e.target) &&
+                    e.target.id !== 'geometrySymbolBtn') {
+                    closeGeometrySymbolMenu();
+                }
+            }
+        
+            function escGeometrySymbolClose(e) {
+                if (e.key === 'Escape') closeGeometrySymbolMenu();
+            }
+        
+            // Update color on input
+            document.getElementById('geometrySymbolColorPicker').addEventListener('input', function() {
+                geometrySymbolColor = this.value;
+                // Update all preview symbols
+                document.querySelectorAll('.geometry-symbol-btn svg').forEach(svg => {
+                    if (svg.getAttribute('fill') !== "none") {
+                        svg.setAttribute('fill', geometrySymbolColor);
+                    }
+                    if (svg.getAttribute('stroke') !== null) {
+                        svg.setAttribute('stroke', geometrySymbolColor);
+                    }
+                });
+            });
+        
+            // On symbol click
+            document.querySelectorAll('.geometry-symbol-btn').forEach(btn => {
+                btn.addEventListener('click', e => {
+                    const svg = e.currentTarget.querySelector('svg').cloneNode(true);
+                
+                    // Apply selected color
+                    if (svg.getAttribute('fill') !== "none") {
+                        svg.setAttribute('fill', geometrySymbolColor);
+                    }
+                    if (svg.getAttribute('stroke') !== null) {
+                        svg.setAttribute('stroke', geometrySymbolColor);
+                    }
+                
+                    // Update main button
+                    const preview = document.getElementById('geometrySymbolBtn');
+                    preview.innerHTML = '';
+                    preview.appendChild(svg);
+                
+                    closeGeometrySymbolMenu();
+                });
+            });
+        
+            // Initialize
+            window.toggleGeometrySymbolMenu = toggleGeometrySymbolMenu;
+            window.closeGeometrySymbolMenu = closeGeometrySymbolMenu;
+        })();
+        </script>
+
+
+      </div>
+      <div class="flex justify-end space-x-2 mt-6">
+        <button onclick="closeAll()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</button>
+        <button onclick="saveLayer('drawn')" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* Utility */
+    const $ = id => document.getElementById(id);
+    
+    /* Open first modal */
+    function openLayerType() {
+      $('createLayerModal').classList.remove('hidden');
+      document.addEventListener('keydown', handleEsc);
+    }
+    
+    /* Close every modal */
+    function closeAll() {
+      document.querySelectorAll('[id$="LayerModal"], [id$="Modal"]').forEach(modal => {
+        modal.classList.add('hidden');
+      });
+      document.removeEventListener('keydown', handleEsc);
+    }
+    
+    /* Handle Esc key */
+    function handleEsc(e) {
+      if (e.key === 'Escape') closeAll();
+    }
+    
+    /* Make the list items clickable */
+    document.querySelectorAll('.layer-item').forEach(li => {
+      li.onclick = () => {
+        const modalId = li.getAttribute('data-modal');
+        $('createLayerModal').classList.add('hidden');
+        $(modalId).classList.remove('hidden');
+      };
+    });
+    
+    /* Save layer function - customize for each layer type */
+    function saveLayer(layerType) {
+      console.log('Saving layer of type:', layerType);
+      // Here you would collect the form data and process it
+      // For example:
+      // const layerName = document.querySelector(`#${layerType}LayerModal input[type="text"]`).value;
+      // const fileInput = document.querySelector(`#${layerType}LayerModal input[type="file"]`);
+      // const file = fileInput ? fileInput.files[0] : null;
+      
+      // Then send to your backend or process as needed
+      alert(`Layer of type ${layerType} would be saved here`);
+      
+      closeAll();
+    }
+  </script>
+
+<!--CReate Search Modal-->
+  <div id="createSearchModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+        <h3 class="text-xl font-semibold mb-4">Search
+        
+        <div class="mb-4">
+            <label class="block text-gray-700 mb-2">Attribute Name</label>
+            <input type="text" id="projectName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        
+        <div class="mb-6">
+            <label class="block text-gray-700 mb-2">Attribute Type</label>
+            <div class="relative">
+                <select class="w-full px-3 py-2 bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-8">
+                    <option>Options</option>
+                    <option>Numeric</option>
+                    <option selected>Text</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 text-gray-500">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex justify-end space-x-3">
+            <button onclick="hideCreateProjectAttributeModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100">Cancel</button>
+            <button onclick="createProjectAttribute()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Add</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+  
+
+    <script>
+     
+    // Toggle sidebar visibility (overlay version)
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const filterInput = document.querySelector('input[name="filter"]'); // Add this line
+
+    sidebarToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sidebar.classList.toggle('sidebar-hidden');
+        sidebarOverlay.classList.toggle('hidden');
+        document.body.classList.toggle('sidebar-open');
+    });
+
+    // Close sidebar when clicking anywhere on the document
+    document.addEventListener('click', (e) => {
+        // Check if sidebar is currently visible
+        const isSidebarVisible = !sidebar.classList.contains('sidebar-hidden');
+        
+        // Check if click is outside the sidebar (and not on the toggle button or filter input)
+        const isClickOutside = !sidebar.contains(e.target) && 
+                              e.target !== sidebarToggle &&
+                              e.target !== filterInput;
+        
+        if (isSidebarVisible && isClickOutside) {
+            sidebar.classList.add('sidebar-hidden');
+            sidebarOverlay.classList.add('hidden');
+            document.body.classList.remove('sidebar-open');
+        }
+    });
         
         // Close sidebar when clicking overlay
         sidebarOverlay.addEventListener('click', () => {
@@ -476,6 +1512,93 @@
             }
         });
         
+        // Projects panel functionality
+        const projectsPanel = document.getElementById('projectsPanel');
+        const projectsOverlay = document.getElementById('projectsOverlay');
+        
+        function showProjectsPanel() {
+            projectsPanel.classList.add('projects-panel-visible');
+            projectsOverlay.style.display = 'block';
+            document.body.classList.add('sidebar-open'); 
+            
+
+
+            // Close sidebar if open
+            //if (!sidebar.classList.contains('sidebar-hidden')) {
+            //    sidebar.classList.add('sidebar-hidden');
+           //     sidebarOverlay.classList.add('hidden');
+          //  }
+            
+            // Close dropdown menus
+            hamburgerDropdown.style.display = 'none';
+            linePlottingDropdown.style.display = 'none';
+        }
+
+        // Projects Attribute panel functionality
+        const projectAttributesPanel = document.getElementById('projectAttributesPanel');
+        const projectsAttributeOverlay = document.getElementById('projectsAttributeOverlay');
+        
+        function showprojectAttributesPanel() {
+            projectAttributesPanel.classList.add('projects-panel-visible');
+            projectsAttributeOverlay.style.display = 'block';
+            document.body.classList.add('sidebar-open'); 
+            
+
+
+            
+            // Close dropdown menus
+            hamburgerDropdown.style.display = 'none';
+            linePlottingDropdown.style.display = 'none';
+        }
+
+             // Layer panel functionality
+             const layerPanel = document.getElementById('layerPanel');
+             const layerOverlay = document.getElementById('layerOverlay');
+             
+             function showLayerPanel() {
+                layerPanel.classList.add('projects-panel-visible');
+                layerOverlay.style.display = 'block';
+                 document.body.classList.add('sidebar-open'); 
+                 
+     
+     
+                 
+                 // Close dropdown menus
+                 hamburgerDropdown.style.display = 'none';
+                 linePlottingDropdown.style.display = 'none';
+             }
+
+
+
+        // Search panel functionality
+        const searchPanel = document.getElementById('searchPanel');
+        const searchOverlay = document.getElementById('searchOverlay');
+        
+        function showSearchPanel() {
+           layerPanel.classList.add('projects-panel-visible');
+           layerOverlay.style.display = 'block';
+            document.body.classList.add('sidebar-open'); 
+            
+
+
+            
+            // Close dropdown menus
+            hamburgerDropdown.style.display = 'none';
+            linePlottingDropdown.style.display = 'none';
+        }
+
+
+        
+        
+        function hideProjectsPanel() {
+            projectsPanel.classList.remove('projects-panel-visible');
+            projectsOverlay.style.display = 'none';
+            document.body.classList.remove('sidebar-open');
+        }
+        
+        // Close projects panel when clicking overlay
+        projectsOverlay.addEventListener('click', hideProjectsPanel);
+        
         // Page navigation
         function showPage(pageId) {
             // Hide all pages
@@ -492,6 +1615,11 @@
                 sidebar.classList.add('sidebar-hidden');
                 sidebarOverlay.classList.add('hidden');
                 document.body.classList.remove('sidebar-open');
+            }
+            
+            // Close projects panel if open
+            if (projectsPanel.classList.contains('projects-panel-visible')) {
+                hideProjectsPanel();
             }
             
             // Close dropdown menus
@@ -522,10 +1650,163 @@
             // In a real app, this would start recording a track
         }
         
-      
-        
         // Show login page by default
         showPage('loginPage');
+
+        // Show Create Project Modal
+function showCreateProjectModal() {
+    document.getElementById('createProjectModal').classList.remove('hidden');
+    document.body.classList.add('modal-open');
+}
+
+// Hide Create Project Modal
+function hideCreateProjectModal() {
+    document.getElementById('createProjectModal').classList.add('hidden');
+    document.body.classList.remove('modal-open');
+}
+
+        // Show Create Project Attribute Modal
+        function showCreateProjectAttributeModal() {
+            document.getElementById('createProjectAttributeModal').classList.remove('hidden');
+            document.body.classList.add('modal-open');
+        }
+        
+        // Hide Create Project Attribute Modal
+        function hideCreateProjectAttributeModal() {
+            document.getElementById('createProjectAttributeModal').classList.add('hidden');
+            document.body.classList.remove('modal-open');
+        }
+
+          // Show Create Layer Modal
+          function showCreateLayerModal() {
+            document.getElementById('createLayerModal').classList.remove('hidden');
+            document.body.classList.add('modal-open');
+        }
+        
+        // Hide Create Layer Modal
+        function hideCreateLayerModal() {
+            document.getElementById('createLayerModal').classList.add('hidden');
+            document.body.classList.remove('modal-open');
+        }
+
+
+
+
+// Create Project Function
+function createProject() {
+    const projectName = document.getElementById('projectName').value;
+    if (!projectName) {
+        alert('Please enter a project name');
+        return;
+    }
+    
+    // Here you would typically make an API call to create the project
+    alert(`Project "${projectName}" created successfully!`);
+    hideCreateProjectModal();
+    
+    // Refresh projects list or do other post-creation actions
+}
+
+// add Project Attribute Function
+function createProjectAttribute() {
+    const projectName = document.getElementById('projectName').value;
+    if (!projectName) {
+        alert('Please add a project name');
+        return;
+    }
+    
+    // Here you would typically make an API call to create the project
+    alert(`Project "${projectName}" created successfully!`);
+    hideCreateProjectAttributeModal();
+    
+    // Refresh projects list or do other post-creation actions
+}
+
+// Show Project Attributes Panel
+function showProjectAttributesPanel() {
+    document.getElementById('projectAttributesPanel').classList.add('projects-panel-visible');
+    document.getElementById('projectsOverlay').style.display = 'block';
+    document.body.classList.add('sidebar-open');
+}
+
+// Hide Project Attributes Panel
+function hideProjectAttributesPanel() {
+    document.getElementById('projectAttributesPanel').classList.remove('projects-panel-visible');
+    document.getElementById('projectsOverlay').style.display = 'none';
+    document.body.classList.remove('sidebar-open');
+}
+
+// Save Project Attributes
+function saveProjectAttributes() {
+    // Add your save logic here
+    alert('Project attributes saved!');
+    hideProjectAttributesPanel();
+}
+
+// Layer Function
+function createLayer() {
+    const projectName = document.getElementById('projectName').value;
+    if (!projectName) {
+        alert('Please add a Layer');
+        return;
+    }
+    
+    // Here you would typically make an API call to create the project
+    alert(`Layer "${projectName}" created successfully!`);
+    hideCreateLayerModal();
+    
+    // Refresh projects list or do other post-creation actions
+}
+
+// Show Layer Panel
+function showLayerPanel() {
+    document.getElementById('layerPanel').classList.add('projects-panel-visible');
+    document.getElementById('projectsOverlay').style.display = 'block';
+    document.body.classList.add('sidebar-open');
+}
+
+// Hide Layer Panel
+function hideLayerPanel() {
+    document.getElementById('layerPanel').classList.remove('projects-panel-visible');
+    document.getElementById('projectsOverlay').style.display = 'none';
+    document.body.classList.remove('sidebar-open');
+}
+
+
+// Search Function
+function createLayer() {
+    const projectName = document.getElementById('projectName').value;
+    if (!projectName) {
+        alert('Please add a Layer');
+        return;
+    }
+    
+ 
+    
+    // Refresh projects list or do other post-creation actions
+}
+
+// Show search Panel
+function showSearchPanel() {
+    document.getElementById('searchPanel').classList.add('projects-panel-visible');
+    document.getElementById('projectsOverlay').style.display = 'block';
+    document.body.classList.add('sidebar-open');
+}
+
+// Hide search Panel
+function hideSearchPanel() {
+    document.getElementById('searchPanel').classList.remove('projects-panel-visible');
+    document.getElementById('projectsOverlay').style.display = 'none';
+    document.body.classList.remove('sidebar-open');
+}
+
+
+
+
+
+       
+        
+        
     </script>
 </body>
 </html>
