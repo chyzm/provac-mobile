@@ -195,9 +195,9 @@
                         
                         <!-- Line Plotting Dropdown Menu -->
                         <div id="linePlottingDropdown" class="dropdown-menu">
-                            <a href="#" onclick="recordFeature()">Record Feature</a>
+                            <a href="#" onclick="showFeatureLayerPanel()">Record Feature</a>
                             <div class="dropdown-divider"></div>
-                            <a href="#" onclick="recordTrack()">Record Track</a>
+                            <a href="#" onclick="showTrackPanel()">Record Track</a>
                           </div>
                           
                     </div>
@@ -502,21 +502,22 @@
                             <div class="mb-6">
                                 <label class="block text-gray-700 mb-2">Background Map</label>
                                 <div class="relative">
-                                    <select class="w-full px-3 py-2 bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-8">
-                                        <option>None</option>
-                                        <option >Apple Maps</option>
-                                        <option>Apple Satellite</option>
-                                        <option>Apple Hybrid</option>
-                                        <option selected>OpenStreetMap</option>
-                                        <option>Water Color</option>
-                                        <option>Google Street</option>
+                                    <select id="layer-select" class="w-full px-3 py-2 bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-8">
+                                      <option value="none">None</option>
+                                      <option value="apple-maps">Apple Maps</option>
+                                      <option value="apple-satellite">Apple Satellite</option>
+                                      <option value="apple-hybrid">Apple Hybrid</option>
+                                      <option value="osm" selected>OpenStreetMap</option>
+                                      <option value="watercolor">Water Color</option>
+                                      <option value="google-street">Google Street</option>
+                                      <option value="google-satellite">Google Satellite</option>
                                     </select>
                                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 text-gray-500">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                        </svg>
+                                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                      </svg>
                                     </div>
-                                </div>
+                                  </div>
                             </div>
 
                             <div class="flex items-center space-x-4 mb-3">
@@ -814,7 +815,7 @@
     <div class="p-4">
         <!-- Header row with title and buttons -->
         <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-semibold text-center" style="margin-right: 30px;">Track</h2>
+            <h2 class="text-xl font-semibold text-center" style="margin-right: 30px;">Record Track</h2>
             <button onclick="hideTrackPanel()" class="text-gray-600 text-xl font-bold">&times;</button>
         </div>
 
@@ -2170,19 +2171,88 @@ function saveTrack() {
     <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<script>
-    // Wait for page to load fully
-    window.addEventListener('load', function () {
-      // Create a Leaflet map in the 'map' div
-      var map = L.map('map').setView([54.5260, 15.2551], 4); // Center of Europe
+
   
-      // Add OpenStreetMap tile layer
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  
+  
+  <script>
+    window.addEventListener('load', function () {
+      // Initialize the map
+      var map = L.map('map', {
+        center: [54.5260, 15.2551],
+        zoom: 4,
+        zoomControl: false // disable default zoom control to place custom
+      });
+  
+      // Tile layers
+      var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
-      }).addTo(map);
+      });
+  
+      var watercolor = L.tileLayer('https://stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg', {
+        maxZoom: 16,
+        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under CC BY 3.0. Data by OpenStreetMap, under ODbL.'
+      });
+  
+      // Google Maps layers using Google tile URLs
+      // Note: Using Google's tiles directly without API key can be against TOS; this is for demo only
+      var googleStreet = L.tileLayer('http://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+        maxZoom: 20,
+        attribution: '© Google'
+      });
+  
+      var googleSatellite = L.tileLayer('http://mt0.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+        maxZoom: 20,
+        attribution: '© Google'
+      });
+  
+      // You can add Apple Maps layers similarly if you find tile URLs (usually proprietary, so skipped here)
+  
+      // Start with OSM
+      osm.addTo(map);
+  
+      // Add zoom control at bottom right
+      L.control.zoom({ position: 'bottomright' }).addTo(map);
+  
+      // Layer switch logic
+      var currentLayer = osm;
+  
+      document.getElementById('layer-select').addEventListener('change', function () {
+        var selected = this.value;
+  
+        // Remove current layer
+        if (currentLayer) {
+          map.removeLayer(currentLayer);
+        }
+  
+        // Add new layer based on selection
+        switch (selected) {
+          case 'osm':
+            currentLayer = osm;
+            break;
+          case 'watercolor':
+            currentLayer = watercolor;
+            break;
+          case 'google-street':
+            currentLayer = googleStreet;
+            break;
+          case 'google-satellite':
+            currentLayer = googleSatellite;
+            break;
+          // You can add cases for Apple Maps if tile URLs available
+          default:
+            currentLayer = null; // no base layer
+            break;
+        }
+  
+        if (currentLayer) {
+          currentLayer.addTo(map);
+        }
+      });
     });
   </script>
+  
 
 </body>
 </html>
