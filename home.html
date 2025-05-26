@@ -1,180 +1,244 @@
-       <!-- Sidebar - Overlay version -->
-       <aside id="sidebar" class="sidebar-transition sidebar-hidden w-64 bg-black text-light fixed top-16 left-0 bottom-0 z-20 overflow-y-auto shadow-xl">
-        <div class="p-4">
-            <!-- Project Section -->
-            <div class="mb-6">
-                <h2 class="text-lg font-semibold mb-2 text-white">Project</h2>
-                <ul class="space-y-2">
-                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Project Attributes</a></li>
-                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Layers</a></li>
-                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Search</a></li>
-                </ul>
-            </div>
-            
-            <!-- GNSS Section -->
-            <div class="mb-6">
-                <h2 class="text-lg font-semibold mb-2 text-white">GNSS</h2>
-                <ul class="space-y-2">
-                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Bluetooth GNSS</a></li>
-                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">GNSS Status</a></li>
-                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Skyplot</a></li>
-                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">NTRIP Client</a></li>
-                </ul>
-            </div>
-            
-            <!-- Record Section -->
-            <div class="mb-6">
-                <h2 class="text-lg font-semibold mb-2 text-white">Record</h2>
-                <ul class="space-y-2">
-                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Feature</a></li>
-                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Track</a></li>
-                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Photo</a></li>
-                </ul>
-            </div>
-            
-            <!-- Import Section -->
-            <div class="mb-6">
-                <h2 class="text-lg font-semibold mb-2 text-white">Import</h2>
-                <ul class="space-y-2">
-                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Import Project</a></li>
-                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Import Template</a></li>
-                </ul>
-            </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GNSS Modal with Fixed Color Picker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+</head>
+<body class="bg-gray-100 p-8">
+   
 
-            <!-- Share/Export Section -->
-            <div class="mb-6">
-                <h2 class="text-lg font-semibold mb-2 text-white">Share / Export</h2>
-                <ul class="space-y-2">
-                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Share</a></li>
-                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Export</a></li>
-                </ul>
-            </div>
-
-            <!-- Templates Section -->
-            <div class="mb-6">
-                <h2 class="text-lg font-semibold mb-2 text-white">Templates</h2>
-                <ul class="space-y-2">
-                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Share Template</a></li>
-                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Export Template</a></li>
-                </ul>
-            </div>
-
-            <!-- Other Section -->
-            <div class="mb-6">
-                <h2 class="text-lg font-semibold mb-2 text-white">Other</h2>
-                <ul class="space-y-2">
-                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Compass</a></li>
-                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Settings</a></li>
-                    <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">About</a></li>
-                </ul>
-            </div>
-
-
-        </div>
-    </aside>
-
-
-
-    // Toggle sidebar visibility (overlay version)
-    const sidebarToggle = document.getElementById('sidebarToggle');
-    const sidebar = document.getElementById('sidebar');
-    const sidebarOverlay = document.getElementById('sidebarOverlay');
-    const filterInput = document.querySelector('input[name="filter"]'); // Add this line
-
-    sidebarToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        sidebar.classList.toggle('sidebar-hidden');
-        sidebarOverlay.classList.toggle('hidden');
-        document.body.classList.toggle('sidebar-open');
-    });
-
-    // Close sidebar when clicking anywhere on the document
-    document.addEventListener('click', (e) => {
-        // Check if sidebar is currently visible
-        const isSidebarVisible = !sidebar.classList.contains('sidebar-hidden');
-        
-        // Check if click is outside the sidebar (and not on the toggle button or filter input)
-        const isClickOutside = !sidebar.contains(e.target) && 
-                              e.target !== sidebarToggle &&
-                              e.target !== filterInput;
-        
-        if (isSidebarVisible && isClickOutside) {
-            sidebar.classList.add('sidebar-hidden');
-            sidebarOverlay.classList.add('hidden');
-            document.body.classList.remove('sidebar-open');
-        }
-    });
-
- 
-
-
-    <script>
-        // Toggle sidebar visibility (overlay version)
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebar = document.getElementById('sidebar');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
-    
-        sidebarToggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            sidebar.classList.toggle('sidebar-hidden');
-            sidebarOverlay.classList.toggle('hidden');
-            document.body.classList.toggle('sidebar-open');
-        });
-    
-        // Close sidebar when clicking anywhere on the document
-        document.addEventListener('click', (e) => {
-            // Check if sidebar is currently visible
-            const isSidebarVisible = !sidebar.classList.contains('sidebar-hidden');
-            
-            // Check if click is outside the sidebar (and not on the toggle button)
-            const isClickOutside = !sidebar.contains(e.target) && e.target !== sidebarToggle;
-            
-            if (isSidebarVisible && isClickOutside) {
-                sidebar.classList.add('sidebar-hidden');
-                sidebarOverlay.classList.add('hidden');
-                document.body.classList.remove('sidebar-open');
-            }
-        });
-    
-        // Prevent clicks inside sidebar from closing it
-        sidebar.addEventListener('click', (e) => {
-            e.stopPropagation();
-        });
-    
-        // Rest of your existing JavaScript code...
-        // (Keep all the other functions and event listeners the same)
-    </script>
-
-
-    <!--CReate Search Modal-->
-  <div id="createSearchModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
-    <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4">
-        <h3 class="text-xl font-semibold mb-4">Search
-        
-        <div class="mb-4">
-            <label class="block text-gray-700 mb-2">Attribute Name</label>
-            <input type="text" id="projectName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </div>
-        
-        <div class="mb-6">
-            <label class="block text-gray-700 mb-2">Attribute Type</label>
-            <div class="relative">
-                <select class="w-full px-3 py-2 bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-8">
-                    <option>Options</option>
-                    <option>Numeric</option>
-                    <option selected>Text</option>
-                </select>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 text-gray-500">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
+    <!-- GNSS Recorded Feature Modal -->
+      <!-- Trigger button for testing -->
+    <button onclick="document.getElementById('numericLayerModal').classList.remove('hidden')" 
+    class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+Open GNSS Modal
+</button>
+    <div id="numericLayerModal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/60" onclick="closeAll()"></div>
+        <div class="relative mx-auto mt-24 w-96 bg-white p-6 rounded-lg shadow-lg" onclick="event.stopPropagation()">
+            <h3 class="text-lg font-bold mb-4">Add GNSS Recorded Feature</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Layer Name</label>
+                    <input type="text" class="w-full px-3 py-2 border rounded">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Feature Type</label>
+                    <select class="w-full px-3 py-2 border rounded">
+                        <option value="point">Point</option>
+                        <option value="line">Line</option>
+                        <option value="polygon">Polygon</option>
+                    </select>
+                </div>
+                <div class="relative w-full max-w-sm">
+                    <!-- Label and Current Symbol -->
+                    <label class="flex items-center justify-between text-sm font-medium text-gray-700 mb-1 select-none">
+                        <span>Geometry Symbol</span>
+                        <button id="currentSymbolBtn" class="w-6 h-6 text-blue-600" onclick="toggleSymbolMenu(event)">
+                            <!-- Default: Circle Outline -->
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>
+                        </button>
+                    </label>
+                
+                    <!-- Symbol Menu -->
+                    <div id="symbolMenu"
+                         class="absolute right-0 mt-1 w-56 bg-white border rounded shadow-lg p-2 space-y-2 hidden z-50">
+                
+                        <!-- Color Picker -->
+                        <div class="flex items-center justify-between px-2">
+                            <span class="text-sm font-medium text-gray-600">Point Color</span>
+                            <input type="color" id="symbolColorPicker" class="w-6 h-6 border rounded cursor-pointer" value="#2563eb" />
+                        </div>
+                        <hr class="my-1">
+                
+                        <!-- Symbol Items -->
+                        <div id="symbolList" class="space-y-2">
+                            <p class="text-sm font-medium text-gray-600">Point Shape</p>
+                            
+                            <button class="symbol-btn flex items-center space-x-2 w-full text-gray-700 hover:text-blue-600 p-1 rounded"
+                                    data-symbol="filled-triangle" title="Filled Triangle">
+                                <svg viewBox="0 0 24 24" fill="#2563eb" class="symbol-icon w-4 h-4"><polygon points="12 4 20 20 4 20"/></svg>
+                                <span>Filled Triangle</span>
+                            </button>
+                
+                            <button class="symbol-btn flex items-center space-x-2 w-full text-gray-700 hover:text-blue-600 p-1 rounded"
+                                    data-symbol="triangle" title="Triangle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" class="symbol-icon w-4 h-4">
+                                    <polygon points="12 4 20 20 4 20"/>
+                                </svg>
+                                <span>Triangle</span>
+                            </button>
+                
+                            <button class="symbol-btn flex items-center space-x-2 w-full text-gray-700 hover:text-blue-600 p-1 rounded"
+                                    data-symbol="filled-square" title="Filled Square">
+                                <svg viewBox="0 0 24 24" fill="#2563eb" class="w-4 h-4">
+                                    <rect x="4" y="4" width="16" height="16" rx="2"/>
+                                </svg>
+                                <span>Filled Square</span>
+                            </button>
+                        
+                            <button class="symbol-btn flex items-center space-x-2 w-full text-gray-700 hover:text-blue-600 p-1 rounded"
+                                    data-symbol="square" title="Square">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" class="w-4 h-4">
+                                    <rect x="4" y="4" width="16" height="16" rx="2"/>
+                                </svg>
+                                <span>Square</span>
+                            </button>
+                        
+                            <button class="symbol-btn flex items-center space-x-2 w-full text-gray-700 hover:text-blue-600 p-1 rounded"
+                                    data-symbol="plus" title="Plus">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" class="w-4 h-4">
+                                    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                                </svg>
+                                <span>Plus</span>
+                            </button>
+                        
+                            <button class="symbol-btn flex items-center space-x-2 w-full text-gray-700 hover:text-blue-600 p-1 rounded"
+                                    data-symbol="cross" title="Cross">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" class="w-4 h-4">
+                                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                                </svg>
+                                <span>Cross</span>
+                            </button>
+                        
+                            <button class="symbol-btn flex items-center space-x-2 w-full text-gray-700 hover:text-blue-600 p-1 rounded"
+                                    data-symbol="filled-circle" title="Filled Circle">
+                                <svg viewBox="0 0 24 24" fill="#2563eb" class="w-4 h-4">
+                                    <circle cx="12" cy="12" r="9"/>
+                                </svg>
+                                <span>Filled Circle</span>
+                            </button>
+                        
+                            <button class="symbol-btn flex items-center space-x-2 w-full text-gray-700 hover:text-blue-600 p-1 rounded"
+                                    data-symbol="circle" title="Circle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" class="symbol-icon w-4 h-4">
+                                    <circle cx="12" cy="12" r="9"/>
+                                </svg>
+                                <span>Circle</span>
+                            </button>
+                        </div>
+                
+                        <!-- OK / Cancel -->
+                        <div class="flex justify-end space-x-4 pt-2 border-t mt-2 text-sm text-blue-600">
+                            <button onclick="closeMenu()" class="hover:underline">Cancel</button>
+                            <button onclick="closeMenu()" class="font-semibold hover:underline">OK</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="flex justify-end space-x-3">
-            <button onclick="hideCreateProjectAttributeModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100">Cancel</button>
-            <button onclick="createProjectAttribute()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Add</button>
+            <div class="flex justify-end space-x-2 mt-6">
+                <button onclick="closeAll()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</button>
+                <button onclick="saveLayer('gnss')" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Add</button>
+            </div>
         </div>
     </div>
-</div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        let selectedColor = "#2563eb"; // default blue
+        
+        function toggleSymbolMenu(e) {
+            e.stopPropagation();
+            document.getElementById('symbolMenu').classList.toggle('hidden');
+            document.addEventListener('click', outsideClose);
+            document.addEventListener('keydown', escClose);
+        }
+        
+        function closeMenu() {
+            document.getElementById('symbolMenu').classList.add('hidden');
+            document.removeEventListener('click', outsideClose);
+            document.removeEventListener('keydown', escClose);
+        }
+        
+        function outsideClose(e) {
+            if (!document.getElementById('symbolMenu').contains(e.target) &&
+                e.target.id !== 'currentSymbolBtn') closeMenu();
+        }
+        
+        function escClose(e) {
+            if (e.key === 'Escape') closeMenu();
+        }
+        
+        function closeAll() {
+            document.getElementById('numericLayerModal').classList.add('hidden');
+            closeMenu();
+        }
+        
+        function saveLayer(type) {
+            // Add your save logic here
+            console.log('Saving layer:', type);
+            closeAll();
+        }
+        
+        // Update color on input - FIXED VERSION
+        document.getElementById('symbolColorPicker').addEventListener('input', function () {
+            selectedColor = this.value;
+            console.log('Color changed to:', selectedColor); // Debug log
+            
+            // Update all symbol SVGs in the menu
+            document.querySelectorAll('.symbol-btn svg').forEach(svg => {
+                // Check if it's a filled shape (has fill attribute that's not "none")
+                const currentFill = svg.getAttribute('fill');
+                if (currentFill && currentFill !== "none") {
+                    svg.setAttribute('fill', selectedColor);
+                }
+                
+                // Check if it's a stroked shape (has stroke attribute)
+                const currentStroke = svg.getAttribute('stroke');
+                if (currentStroke && currentStroke !== "none") {
+                    svg.setAttribute('stroke', selectedColor);
+                }
+            });
+            
+            // Also update the current symbol button if it has color
+            const currentBtn = document.getElementById('currentSymbolBtn');
+            const currentSvg = currentBtn.querySelector('svg');
+            if (currentSvg) {
+                const currentFill = currentSvg.getAttribute('fill');
+                if (currentFill && currentFill !== "none") {
+                    currentSvg.setAttribute('fill', selectedColor);
+                }
+                
+                const currentStroke = currentSvg.getAttribute('stroke');
+                if (currentStroke && currentStroke !== "none") {
+                    currentSvg.setAttribute('stroke', selectedColor);
+                }
+            }
+        });
+        
+        // On symbol click
+        document.querySelectorAll('.symbol-btn').forEach(btn => {
+            btn.addEventListener('click', e => {
+                const svg = e.currentTarget.querySelector('svg').cloneNode(true);
+        
+                // Apply selected color to the cloned SVG
+                const currentFill = svg.getAttribute('fill');
+                if (currentFill && currentFill !== "none") {
+                    svg.setAttribute('fill', selectedColor);
+                }
+                
+                const currentStroke = svg.getAttribute('stroke');
+                if (currentStroke && currentStroke !== "none") {
+                    svg.setAttribute('stroke', selectedColor);
+                }
+        
+                // Update main button
+                const preview = document.getElementById('currentSymbolBtn');
+                preview.innerHTML = '';
+                preview.appendChild(svg);
+        
+                closeMenu();
+            });
+        });
+        
+        // Initialize colors on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Trigger initial color update
+            document.getElementById('symbolColorPicker').dispatchEvent(new Event('input'));
+        });
+    </script>
+</body>
+</html>
