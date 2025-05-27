@@ -240,7 +240,7 @@
                     </button>
                     
                     <!-- Line Plotting Icon with Dropdown -->
-                    <div class="relative" >
+                    <div class="relative " >
                         <button id="linePlottingMenu" class="py-1 px-0 rounded-full hover:bg-secondary">
                             <svg xmlns="http://www.w3.org/2000/svg" width="64" height="32" viewBox="0 0 64 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="8" cy="16" r="2" fill="#007BFF"/>
@@ -252,10 +252,10 @@
                         </button>
                         
                         <!-- Line Plotting Dropdown Menu -->
-                        <div id="linePlottingDropdown" class="dropdown-menu">
-                            <a href="#" onclick="showFeatureLayerPanel()">Record Feature</a>
+                        <div id="linePlottingDropdown" class=" dark:bg-gray-700 dropdown-menu ">
+                            <a href="#" class="text-white dark:text-white" onclick="showFeatureLayerPanel()">Record Feature</a>
                             <div class="dropdown-divider"></div>
-                            <a href="#" onclick="showTrackPanel()">Record Track</a>
+                            <a href="#" class="text-white dark:text-white"  onclick="showTrackPanel()">Record Track</a>
                           </div>
                           
                     </div>
@@ -271,11 +271,11 @@
                         </button>
                         
                         <!-- Hamburger Dropdown Menu -->
-                        <div id="hamburgerDropdown" class="dropdown-menu">
-                            <a href="#" onclick="showProjectsPanel()">Projects</a>
-                            <a href="#" onclick="triggerCamera()">Take new Photo</a>
+                        <div id="hamburgerDropdown" class="dropdown-menu  dark:bg-gray-700">
+                            <a href="#" class="text-white dark:text-white" onclick="showProjectsPanel()">Projects</a>
+                            <a href="#" class="text-white dark:text-white" onclick="triggerCamera()">Take new Photo</a>
                             <div class="dropdown-divider"></div>
-                            <a href="#" onclick="showPage('loginPage')">Logout</a>
+                            <a href="#" class="text-white dark:text-white" onclick="showPage('loginPage')">Logout</a>
                         </div>
                     </div>
                 </div>
@@ -322,22 +322,22 @@
                 <ul class="space-y-2">
                     <div class="flex items-center mb-2 space-x-2">
                         <img src="/img/bluetooth.jpg" alt="projects" class="w-6 h-6">
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700" onclick="showBluetoothGnssPanel()">Bluetooth GNSS</a></li>
+                        <li><a href="#" class="block px-3 py-2 rounded text-white  hover:bg-gray-700" onclick="showBluetoothGnssPanel()">Bluetooth GNSS</a></li>
                       </div>
 
                       <div class="flex items-center mb-2 space-x-2">
                         <img src="/img/gnss_status.jpg" alt="projects" class="w-6 h-6">
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700" onclick="showGnssStatusPanel()">GNSS Status</a></li>
+                        <li><a href="#" class="block px-3 py-2 rounded text-white hover:bg-gray-700" onclick="showGnssStatusPanel()">GNSS Status</a></li>
                       </div>
 
                       <div class="flex items-center mb-2 space-x-2">
                         <img src="/img/skyplot.jpg" alt="projects" class="w-6 h-6">
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Skyplot</a></li>
+                        <li><a href="#" class="block px-3 py-2 rounded text-white hover:bg-gray-700">Skyplot</a></li>
                       </div>
 
                       <div class="flex items-center mb-2 space-x-2">
                         <img src="/img/ntrip.jpg" alt="projects" class="w-6 h-6">
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700" onclick="showNtripClientPanel()">NTRIP Client</a></li>
+                        <li><a href="#" class="block px-3 py-2 rounded text-white hover:bg-gray-700" onclick="showNtripClientPanel()">NTRIP Client</a></li>
                       </div> 
                 </ul>
             </div>
@@ -348,18 +348,18 @@
                 <ul class="space-y-2">
                     <div class="flex items-center mb-2 space-x-2">
                         <img src="/img/feature.jpg" alt="projects" class="w-6 h-6">
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700" onclick="showFeatureLayerPanel()">Feature</a></li>
+                        <li><a href="#" class="block px-3 py-2 rounded text-white hover:bg-gray-700" onclick="showFeatureLayerPanel()">Feature</a></li>
                       </div>
 
                       <div class="flex items-center mb-2 space-x-2">
                         <img src="/img/track.jpg" alt="projects" class="w-6 h-6">
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700" onclick="showTrackPanel()">Track</a></li>
+                        <li><a href="#" class="block px-3 py-2 rounded text-white hover:bg-gray-700" onclick="showTrackPanel()">Track</a></li>
                       </div>
                        <!--Open Camera on Mobile-->
                       <div class="flex items-center mb-2 space-x-2">
                         <img src="/img/photo.jpg" alt="projects" class="w-6 h-6">
                         <li>
-                          <a href="#" class="block px-3 py-2 rounded hover:bg-gray-700" onclick="triggerCamera()">Photo</a>
+                          <a href="#" class="block px-3 py-2 rounded text-white hover:bg-gray-700" onclick="triggerCamera()">Photo</a>
                         </li>
                       </div>
                       
@@ -389,12 +389,12 @@
                 <ul class="space-y-2">
                     <div class="flex items-center mb-2 space-x-2">
                         <img src="/img/import-project.jpg" alt="projects" class="w-6 h-6">
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Import Project</a></li>
+                        <li><a href="#" class="block px-3 py-2 rounded text-white hover:bg-gray-700">Import Project</a></li>
                       </div>
 
                       <div class="flex items-center mb-2 space-x-2">
                         <img src="/img/import-templates.jpg" alt="projects" class="w-6 h-6">
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Import Template</a></li>
+                        <li><a href="#" class="block px-3 py-2 rounded text-white hover:bg-gray-700">Import Template</a></li>
                       </div>
                 </ul>
             </div>
@@ -405,12 +405,12 @@
                 <ul class="space-y-2">
                     <div class="flex items-center mb-2 space-x-2">
                         <img src="/img/share.jpg" alt="projects" class="w-6 h-6">
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Share</a></li>
+                        <li><a href="#" class="block px-3 py-2 rounded text-white hover:bg-gray-700">Share</a></li>
                       </div>
 
                       <div class="flex items-center mb-2 space-x-2">
                         <img src="/img/export.jpg" alt="projects" class="w-6 h-6">
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Export</a></li>
+                        <li><a href="#" class="block px-3 py-2 rounded text-white hover:bg-gray-700">Export</a></li>
                       </div> 
                 </ul>
             </div>
@@ -421,12 +421,12 @@
                 <ul class="space-y-2">
                     <div class="flex items-center mb-2 space-x-2">
                         <img src="/img/share-template.jpg" alt="projects" class="w-6 h-6">
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Share Template</a></li>
+                        <li><a href="#" class="block px-3 py-2 rounded text-white hover:bg-gray-700">Share Template</a></li>
                       </div> 
 
                       <div class="flex items-center mb-2 space-x-2">
                         <img src="/img/export-template.jpg" alt="projects" class="w-6 h-6">
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Export Template</a></li>
+                        <li><a href="#" class="block px-3 py-2 rounded text-white hover:bg-gray-700">Export Template</a></li>
                       </div>
                 </ul>
             </div>
@@ -437,17 +437,17 @@
                 <ul class="space-y-2">
                     <div class="flex items-center mb-2 space-x-2">
                         <img src="/img/compass.jpg" alt="projects" class="w-6 h-6">
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Compass</a></li>
+                        <li><a href="#" class="block px-3 py-2 rounded text-white hover:bg-gray-700">Compass</a></li>
                       </div>
 
                       <div class="flex items-center mb-2 space-x-2">
                         <img src="/img/settings.jpg" alt="projects" class="w-6 h-6">
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">Settings</a></li>
+                        <li><a href="#" class="block px-3 py-2 rounded text-white hover:bg-gray-700">Settings</a></li>
                       </div>
 
                       <div class="flex items-center mb-2 space-x-2">
                         <img src="/img/about.jpg" alt="projects" class="w-6 h-6">
-                        <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-700">About</a></li>
+                        <li><a href="#" class="block px-3 py-2 rounded text-white text-white hover:bg-gray-700">About</a></li>
                       </div>
                 </ul>
                 <br>
@@ -564,16 +564,16 @@
 
                             <!-- Content area (add your pLayer form here) -->
 
-                            <div class="mb-6 dark:bg-gray-800">
+                            <div class="mb-6 text-gray-900 dark:text-gray-900 dark:bg-gray-800">
                                 <label class="block text-gray-700 mb-2">Background Map</label>
                                 <div class="relative">
                                     <select id="layer-select" class=" w-full px-3 py-2 bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-8">
-                                      <option value="none">None</option>
+                                      <option value="none" ">None</option>
                                       <option value="apple-maps">Apple Maps</option>
                                       <option value="apple-satellite">Apple Satellite</option>
                                       <option value="apple-hybrid">Apple Hybrid</option>
                                       <option value="osm" selected>OpenStreetMap</option>
-                                      <option value="watercolor">Water Color</option>
+                                      <option value="osmDark">OpenStreetMap-Dark</option>
                                       <option value="google-street">Google Street</option>
                                       <option value="google-satellite">Google Satellite</option>
                                     </select>
@@ -598,7 +598,7 @@
                               </div>
                               
 
-                            <div class="">
+                            <div class="text-gray-900 dark:text-gray-900">
                                 <label class="block text-gray-700 mb-2">Filter</label>
                                 <div class="relative">
                                     <select class="w-full px-3 py-2 bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none pr-8">
@@ -928,7 +928,7 @@
         <main class="mt-16 flex-1 overflow-y-auto bg-white">
             <div class="container-mobile flex-1 w-full h-full ">  <!-- Added h-full here -->
               <!-- Map Here -->
-              <div id="map" class="w-full h-full z-0 dark:bg-gray-800" ></div>  <!-- Changed height calculation -->
+              <div id="map" class="w-full h-full z-0" ></div>  <!-- Changed height calculation -->
             </div>
 
 
@@ -2320,10 +2320,12 @@ function saveTrack() {
         attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
       });
   
-      var watercolor = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.{ext}', {
-        maxZoom: 16,
-        attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      });
+      var osmDark = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.{ext}', {
+       
+        maxZoom: 20,
+        attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        ext: 'png'
+    });
   
       // Google Maps layers using Google tile URLs
       // Note: Using Google's tiles directly without API key can be against TOS; this is for demo only
@@ -2361,8 +2363,8 @@ function saveTrack() {
           case 'osm':
             currentLayer = osm;
             break;
-          case 'watercolor':
-            currentLayer = watercolor;
+          case 'osmDark':
+            currentLayer = osmDark;
             break;
           case 'google-street':
             currentLayer = googleStreet;
