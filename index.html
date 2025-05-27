@@ -152,6 +152,26 @@
 #createLayerModal{
     transition: opacity 0.3s ease;
 }
+
+.map-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    
+}
+
+.map-icon i {
+    font-size: 0.75rem;
+}
+
+/* For the vertical icons */
+.vertical-icons-container {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+}
         
     </style>
 </head>
@@ -865,6 +885,50 @@
               <!-- Map Here -->
               <div id="map" class="w-full h-full z-0"></div>  <!-- Changed height calculation -->
             </div>
+
+
+          <!-- Map Icons -->
+<div class="fixed top-16 left-0 right-0 z-10 flex justify-center space-x-4 p-4">
+    <!-- Horizontal Icons (4) -->
+    <button class="map-icon bg-white rounded-full shadow-md hover:bg-blue-100 p-1 w-8 h-8 flex items-center justify-center">
+        <i class="fas fa-sync-alt text-blue-600"></i>
+    </button>
+    <button class="map-icon bg-white rounded-full shadow-md hover:bg-blue-100 p-1 w-8 h-8 flex items-center justify-center">
+        <i class="fas fa-satellite-dish text-blue-600"></i>
+    </button>
+    <button class="map-icon bg-white rounded-full shadow-md hover:bg-blue-100 p-1 w-8 h-8 flex items-center justify-center">
+        <i class="fas fa-cloud-upload-alt text-blue-600"></i>
+
+    </button>
+    <button class="map-icon bg-white rounded-full shadow-md hover:bg-blue-100 p-1 w-8 h-8 flex items-center justify-center">
+        <i class="fas fa-chart-area text-blue-600"></i> 
+    </button>
+    <button class="map-icon bg-white rounded-full shadow-md hover:bg-blue-100 p-1 w-8 h-8 flex items-center justify-center">
+        <i class="fas fa-signal text-blue-600"></i>
+    </button>
+</div>
+
+<div class="fixed top-32 left-2 z-10 flex flex-col space-y-2">
+
+
+    <!-- Vertical Icons (5) -->
+    <button class="map-icon bg-white rounded-full shadow-md hover:bg-blue-100 p-1 w-8 h-8 flex items-center justify-center">
+        <i class="fas fa-search text-blue-600"></i>
+     </button>
+     <button class="map-icon bg-white rounded-full shadow-md hover:bg-blue-100 p-1 w-8 h-8 flex items-center justify-center">
+        <i class="fas fa-location-arrow text-blue-600"></i>
+    </button>
+    <button class="map-icon bg-white rounded-full shadow-md hover:bg-blue-100 p-1 w-8 h-8 flex items-center justify-center">
+        <i class="fas fa-ruler text-blue-600"></i>
+    </button>
+    <button class="map-icon bg-white rounded-full shadow-md hover:bg-blue-100 p-1 w-8 h-8 flex items-center justify-center">
+        <i class="fas fa-draw-polygon text-blue-600"></i>
+    </button>
+    
+</div>
+
+  
+    
         </main>
           
             
@@ -2272,6 +2336,42 @@ function saveTrack() {
         }
       });
     });
+
+
+
+
+   // Handle map icon clicks
+document.querySelectorAll('.map-icon').forEach(icon => {
+    icon.addEventListener('click', function() {
+        const iconClass = this.querySelector('i').className;
+        
+        if (iconClass.includes('fa-sync-alt')) {
+            location.reload(); //  Reloads the current page
+        } else if (iconClass.includes('fa-location-arrow')) {
+            alert('Location arrow clicked - center on current location');
+            // Add geolocation code here
+        } else if (iconClass.includes('fa-cloud-upload-alt')) {
+            showNtripClientPanel();
+        } else if (iconClass.includes('fa-search')) {
+            showSearchPanel();
+        } else if (iconClass.includes('fa-satellite-dish')) {
+            showBluetoothGnssPanel();
+        } else if (iconClass.includes('fa-ruler')) {
+            alert('Measurement tool');
+        } else if (iconClass.includes('fa-draw-polygon')) {
+            alert('Drawing tool');
+        } else if (iconClass.includes('fa-info-circle')) {
+            alert('Map information');
+        } else if (iconClass.includes('fa-cog')) {
+            alert('Map settings');
+        } else if (iconClass.includes('fa-chart-area')) {
+            alert('Map settings');
+        } else if (iconClass.includes('fa-signal')) {
+             showGnssStatusPanel();
+        }
+    });
+});
+
   </script>
   
 
