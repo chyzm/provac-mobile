@@ -573,7 +573,7 @@
                                       <option value="apple-satellite">Apple Satellite</option>
                                       <option value="apple-hybrid">Apple Hybrid</option>
                                       <option value="osm" selected>OpenStreetMap</option>
-                                      <option value="osmDark">OpenStreetMap-Dark</option>
+                                      <option value="osmDark">Carto Dark Map</option>
                                       <option value="google-street">Google Street</option>
                                       <option value="google-satellite">Google Satellite</option>
                                     </select>
@@ -2884,11 +2884,11 @@ function showCompassPanel() {
         attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
       });
   
-      var osmDark = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.{ext}', {
+      var osmDark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
        
         maxZoom: 20,
-        attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        ext: 'png'
+        attribution: '&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        subdomains: 'abcd'
     });
   
       // Google Maps layers using Google tile URLs
